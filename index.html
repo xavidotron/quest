@@ -75,6 +75,16 @@
         height: 100px;
         width: 800px;
       }
+
+      .blockmode {
+        display: none;
+      }
+      #block:checked ~ .indiv {
+        display: none;
+      }
+      #block:checked ~ .blockmode {
+        display: block;
+      }
     </style>
     <script type="text/javascript" src="lz-string.js"></script>
     <script type="text/javascript" src="index.js"></script>
@@ -86,12 +96,12 @@
     <textarea class="copyable" id="html" readonly></textarea>
     <textarea class="copyable" id="discord" readonly></textarea>
     </div>
-    <form onchange="update()">
+    <form onchange="update(event)">
       <label>Name: <input type="text" id="name" value="Name" /></label><br />
       <label>XP: <select id="xp"><option>15</option><option>20</option><option>25</option><option>35</option><option>40</option><option>45</option><option>50</option><option>60</option></select></label>
       <label>Card Color: <select id="color"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select></label>
       <label>Game Mode: <select id="mode"><option>Chuubo's</option><option>Glitch</option></select></label>
-      <label><input type="checkbox" id="block" name="block" />Edit as Block</label>
+      <input type="checkbox" id="block" name="block" /><label for="block">Edit as Block</label>
 
       <h2>Arc Assignments</h2>
       <b>
@@ -106,14 +116,18 @@
       <textarea id="desc"></textarea>
       
       <h2>Major Goals</h2>
+      <div class="indiv">
       <input type="text" id="major1" /><br />
       <input type="text" id="major2" /><br />
       <input type="text" id="major3" /><br />
       <input type="text" id="major4" /><br />
       <input type="text" id="major5" /><br />
       <input type="text" id="major6" />
+      </div>
+      <textarea class="blockmode" id="majorblock"></textarea>
 
       <h2>Quest Flavor</h2>
+      <div class="indiv">
       <select id="cf1a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
       <select id="cf1b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
 <input type="text" id="flavor1" /><br />
@@ -149,7 +163,9 @@
 <input type="text" id="flavor11" /><br />
       <select id="cf12a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
       <select id="cf12b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
-<input type="text" id="flavor12" />
+      <input type="text" id="flavor12" />
+      </div>
+      <textarea class="blockmode" id="flavorblock"></textarea>
       
     </form>
   </body>

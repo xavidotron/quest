@@ -82,9 +82,35 @@ function cardDiscord(name, xp, arc, color, major, flavor, desc) {
 
 function $(id) { return document.getElementById(id); }
 
-var colors = ['purple', 'red', 'blue', 'gold', 'green', 'orange', 'silver', 'black'];
+const colors = ['purple', 'red', 'blue', 'gold', 'green', 'orange', 'silver', 'black'];
+const FLAVOR_RE = / *(?::(purple|red|blue|gold|green|orange|silver|black):)? *(?::(purple|red|blue|gold|green|orange|silver|black):)? *(.*)/i;
 
-function update() {
+function capitalize(s) {
+    if (!s) {
+        return '';
+    }
+    return s[0].toUpperCase() + s.slice(1).toLowerCase();
+}
+
+function update(event) {
+    if (event && event.target.className == 'blockmode') {
+        if (event.target.id == 'majorblock') {
+            const goals = event.target.value.split('\n');
+            for (let i = 0; i < goals.length && i < 6; ++i) {
+                document.getElementById('major' + (i+1)).value = goals[i];
+            }
+        } else {
+            const flavors = event.target.value.split('\n');
+            for (let i = 0; i < flavors.length && i < 12; ++i) {
+                let [full, c1, c2, flavor] = FLAVOR_RE.exec(flavors[i]);
+                document.getElementById('cf' + (i+1) + 'a').value
+                    = capitalize(c1) || 'Purple';
+                document.getElementById('cf' + (i+1) + 'b').value
+                    = capitalize(c2);
+                document.getElementById('flavor' + (i+1)).value = flavor;
+            }
+        }
+    }
     // Save to hash
     let elmses = [document.getElementsByTagName('select'),
                   document.getElementsByTagName('input'),
@@ -94,7 +120,7 @@ function update() {
         let elms = elmses[h];
         for (let i = 0; i < elms.length; ++i) {
             let elm = elms[i];
-            if (elm.className == "copyable" || elm.id == "toggle" || elm.id == "block") {
+            if (elm.className == "copyable" || elm.id == "toggle" || elm.id == "block" || elm.className == "blockmode") {
                 continue;
             }
             if (elm.tagName == 'SELECT' && elm.value == elm.firstElementChild.value) {
@@ -142,6 +168,30 @@ function update() {
     $('discord').value = discord;
     $('thing').innerHTML = html;
     document.getElementsByTagName('title')[0].innerText = $('name').value;
+
+    let majorblockval = '';
+    for (let i = 1; i <= 6; ++i) {
+        majorblockval += document.getElementById('major' + i).value + '\n';
+    }
+    document.getElementById('majorblock').value = majorblockval;
+
+    let flavorblockval = '';
+    for (let i = 1; i <= 12; ++i) {
+        let tmp = '';
+        const a = document.getElementById('cf' + i + 'a');
+        if (a.value) {
+            tmp += ':' + a.value.toLowerCase() + ': ';
+        }
+        const b = document.getElementById('cf' + i + 'b');
+        if (b.value) {
+            tmp += ':' + b.value.toLowerCase() + ': ';
+        }
+        tmp += document.getElementById('flavor' + i).value + '\n';
+        if (tmp != ':purple: \n') {
+            flavorblockval += tmp;
+        }
+    }
+    document.getElementById('flavorblock').value = flavorblockval;
 }
 
 function init() {
