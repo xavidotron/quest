@@ -1,0 +1,156 @@
+<html>
+  <head>
+    <title>Xavid's Quest Card Generator</title>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Amarante&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style type="text/css">
+      @font-face {
+        font-family: 'Droid Serif';
+        font-style: normal;
+        font-weight: normal;
+        src: local('Droid Serif Regular'), url("DroidSerif.ttf") format("truetype");
+      }
+      @font-face {
+        font-family: 'Droid Serif';
+        font-style: italic;
+        font-weight: normal;
+        src: local('Droid Serif Italic'), url("DroidSerif-Italic.ttf") format("truetype");
+      }
+      @font-face {
+        font-family: 'Droid Serif';
+        font-style: normal;
+        font-weight: bold;
+        src: local('Droid Serif Bold'), url("DroidSerif-Bold.ttf") format("truetype");
+      }
+      @font-face {
+        font-family: 'Droid Serif';
+        font-style: italic;
+        font-weight: bold;
+        src: local('Droid Serif Bold Italic'), url("DroidSerif-BoldItalic.ttf") format("truetype");
+      }
+
+      #toggle {
+        display: none;
+      }
+      label[for="toggle"] {
+        color: blue;
+        text-decoration: underline;
+        cursor: pointer;
+        text-align: right;
+        display: block;
+      }
+      #toggle:checked + label::before {
+        content: "Close ";
+      }
+      #toggle:checked ~ #right {
+	  float: right;
+	  width: 600px;
+      }
+      @media print {
+        label[for="toggle"] {
+          display: none;
+        }
+      }
+
+      .copyable {
+        display: none;
+        white-space: pre-wrap;
+        height: 150px;
+        width: 100%;
+        overflow: auto;
+      }
+      #toggle:checked ~ #right > .copyable {
+        display: block;
+      }
+      input[type="text"] {
+	  width: 800px;
+      }
+      form {
+        display: none;
+      }
+      #toggle:checked ~ form {
+        display: block;
+      }
+      form textarea {
+        height: 100px;
+        width: 800px;
+      }
+    </style>
+    <script type="text/javascript" src="lz-string.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+  </head>
+  <body onload="init()">
+    <input type="checkbox" id="toggle" name="toggle" /><label for="toggle">Edit</label>
+    <div id="right">
+    <div id="thing"></div>
+    <textarea class="copyable" id="html" readonly></textarea>
+    <textarea class="copyable" id="discord" readonly></textarea>
+    </div>
+    <form onchange="update()">
+      <label>Name: <input type="text" id="name" value="Name" /></label><br />
+      <label>XP: <select id="xp"><option>15</option><option>20</option><option>25</option><option>35</option><option>40</option><option>45</option><option>50</option><option>60</option></select></label>
+      <label>Card Color: <select id="color"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select></label>
+      <label>Game Mode: <select id="mode"><option>Chuubo's</option><option>Glitch</option></select></label>
+      <label><input type="checkbox" id="block" name="block" />Edit as Block</label>
+
+      <h2>Arc Assignments</h2>
+      <b>
+      1: <label><input type="checkbox" id="purple.1" />Purple</label> <label><input type="checkbox" id="red.1" />Red</label> <label><input type="checkbox" id="blue.1" />Blue</label> <label><input type="checkbox" id="gold.1" />Gold</label> <label><input type="checkbox" id="green.1" />Green</label> <label><input type="checkbox" id="orange.1" />Orange</label> <label><input type="checkbox" id="silver.1" />Silver</label> <label><input type="checkbox" id="black.1" />Black</label><br />
+      2: <label><input type="checkbox" id="purple.2" />Purple</label> <label><input type="checkbox" id="red.2" />Red</label> <label><input type="checkbox" id="blue.2" />Blue</label> <label><input type="checkbox" id="gold.2" />Gold</label> <label><input type="checkbox" id="green.2" />Green</label> <label><input type="checkbox" id="orange.2" />Orange</label> <label><input type="checkbox" id="silver.2" />Silver</label> <label><input type="checkbox" id="black.2" />Black</label><br />
+      3: <label><input type="checkbox" id="purple.3" />Purple</label> <label><input type="checkbox" id="red.3" />Red</label> <label><input type="checkbox" id="blue.3" />Blue</label> <label><input type="checkbox" id="gold.3" />Gold</label> <label><input type="checkbox" id="green.3" />Green</label> <label><input type="checkbox" id="orange.3" />Orange</label> <label><input type="checkbox" id="silver.3" />Silver</label> <label><input type="checkbox" id="black.3" />Black</label><br />
+      4: <label><input type="checkbox" id="purple.4" />Purple</label> <label><input type="checkbox" id="red.4" />Red</label> <label><input type="checkbox" id="blue.4" />Blue</label> <label><input type="checkbox" id="gold.4" />Gold</label> <label><input type="checkbox" id="green.4" />Green</label> <label><input type="checkbox" id="orange.4" />Orange</label> <label><input type="checkbox" id="silver.4" />Silver</label> <label><input type="checkbox" id="black.4" />Black</label><br />
+      5: <label><input type="checkbox" id="purple.5" />Purple</label> <label><input type="checkbox" id="red.5" />Red</label> <label><input type="checkbox" id="blue.5" />Blue</label> <label><input type="checkbox" id="gold.5" />Gold</label> <label><input type="checkbox" id="green.5" />Green</label> <label><input type="checkbox" id="orange.5" />Orange</label> <label><input type="checkbox" id="silver.5" />Silver</label> <label><input type="checkbox" id="black.5" />Black</label><br />
+      </b>
+
+      <h2>Description</h2>
+      <textarea id="desc"></textarea>
+      
+      <h2>Major Goals</h2>
+      <input type="text" id="major1" /><br />
+      <input type="text" id="major2" /><br />
+      <input type="text" id="major3" /><br />
+      <input type="text" id="major4" /><br />
+      <input type="text" id="major5" /><br />
+      <input type="text" id="major6" />
+
+      <h2>Quest Flavor</h2>
+      <select id="cf1a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+      <select id="cf1b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+<input type="text" id="flavor1" /><br />
+      <select id="cf2a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+      <select id="cf2b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+<input type="text" id="flavor2" /><br />
+      <select id="cf3a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+      <select id="cf3b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+<input type="text" id="flavor3" /><br />
+      <select id="cf4a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+      <select id="cf4b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+<input type="text" id="flavor4" /><br />
+      <select id="cf5a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+      <select id="cf5b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+<input type="text" id="flavor5" /><br />
+      <select id="cf6a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+      <select id="cf6b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+<input type="text" id="flavor6" /><br />
+      <select id="cf7a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+      <select id="cf7b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+<input type="text" id="flavor7" /><br />
+      <select id="cf8a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+      <select id="cf8b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+<input type="text" id="flavor8" /><br />
+      <select id="cf9a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+      <select id="cf9b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+<input type="text" id="flavor9" /><br />
+      <select id="cf10a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+      <select id="cf10b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+<input type="text" id="flavor10" /><br />
+      <select id="cf11a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+      <select id="cf11b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+<input type="text" id="flavor11" /><br />
+      <select id="cf12a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+      <select id="cf12b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+<input type="text" id="flavor12" />
+      
+    </form>
+  </body>
+</html>
