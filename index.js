@@ -189,9 +189,12 @@ function update(event) {
         tmp += document.getElementById('flavor' + i).value + '\n';
         if (tmp != ':purple: \n') {
             flavorblockval += tmp;
+        } else {
+            flavorblockval += '\n';
         }
     }
-    document.getElementById('flavorblock').value = flavorblockval;
+    document.getElementById('flavorblock').value = flavorblockval.replace(
+            /\n*$/, '');
 }
 
 function init() {
