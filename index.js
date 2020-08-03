@@ -96,13 +96,16 @@ function update(event) {
     if (event && event.target.className == 'blockmode') {
         if (event.target.id == 'majorblock') {
             const goals = event.target.value.split('\n');
-            for (let i = 0; i < goals.length && i < 6; ++i) {
-                document.getElementById('major' + (i+1)).value = goals[i];
+            for (let i = 0; i < 6; ++i) {
+                document.getElementById('major' + (i+1)).value
+                    = goals[i] || '';
             }
         } else {
             const flavors = event.target.value.split('\n');
-            for (let i = 0; i < flavors.length && i < 12; ++i) {
-                let [full, c1, c2, flavor] = FLAVOR_RE.exec(flavors[i]);
+            for (let i = 0; i < 12; ++i) {
+                const [full, c1, c2, flavor]
+                      = flavors[i] ? FLAVOR_RE.exec(flavors[i])
+                      : ['', undefined, undefined, ''];
                 document.getElementById('cf' + (i+1) + 'a').value
                     = capitalize(c1) || 'Purple';
                 document.getElementById('cf' + (i+1) + 'b').value
