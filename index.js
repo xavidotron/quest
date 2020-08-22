@@ -20,7 +20,7 @@ function cardHtml(name, xp, arc, color, anytimep, major, flavor, desc) {
     if (anytimep) {
         ret += '<div style="font: bold 13pt Droid Serif, serif; margin: 0px 0px 5px">Bonus XP</div>';
         for (let i = 0; i < ANYTIME[color].length; ++i) {
-            ret += ANYTIME[color][i];
+            ret += '<p>' + ANYTIME[color][i] + '</p>';
             if (i < major.length && major[i]) {
                 ret += '<center style="font-size: 12pt">' + major[i] + '</center>';
             }
@@ -54,8 +54,8 @@ function cardHtml(name, xp, arc, color, anytimep, major, flavor, desc) {
     return ret;
 }
 
-function cardDiscord(name, xp, arc, color, major, flavor, desc) {
-    var ret = '**' + name + ' (' + xp + ') (:' + color + ':)**\n\n';
+function cardDiscord(name, xp, arc, color, anytimep, major, flavor, desc) {
+    var ret = '**' + name + ' (' + xp + ') (:' + color + ':)**\n';
     for (var k in arc) {
         ret += k + ': ';
         for (var i = 0; i < arc[k].length; ++i) {
@@ -67,26 +67,36 @@ function cardDiscord(name, xp, arc, color, major, flavor, desc) {
     if (desc) {
         ret += desc + '\n\n';
     }
-    ret += '**Major Goals**\nThe HG can award you 5 XP towards this quest when:\n';
-    for (var i = 0; i < major.length; ++i) {
-        ret += '☐ ' + major[i] + '\n';
-    }
-    ret += 'You can earn each bonus once, for a total of up to ' + major.length * 5 + ' XP.\n\n';
-    ret += '**Quest Flavor**\n';
-    if ($('mode').value == 'Glitch') {
-        ret += "1/chapter, when you're in focus, you can earn a 1 XP for yourself and 1 XP for the quest when:";
-    } else {
-        ret += '1/chapter, you can earn a bonus XP towards this quest when:';
-    }
-    for (var i = 0; i < flavor.length; ++i) {
-        ret += '\n:' + flavor[i][0] + ':';
-        if (flavor[i][1]) {
-            ret += ':' + flavor[i][1] + ':';
+    if (anytimep) {
+        ret += '**Bonus XP**\n';
+        for (let i = 0; i < ANYTIME[color].length; ++i) {
+            ret += ANYTIME[color][i].replace(/<\/p><p>/g, '\n') + '\n';
+            if (i < major.length && major[i]) {
+                ret += major[i] + '\n';
+            }
         }
-        ret += ' ' + flavor[i][2];
-    }
-    if ($('mode').value == 'Glitch') {
-        ret += '\n…and so can any other player, 1/chapter, if they substitute their PC for yours or otherwise involve them.';
+    } else {
+        ret += '**Major Goals**\nThe HG can award you 5 XP towards this quest when:\n';
+        for (var i = 0; i < major.length; ++i) {
+            ret += '☐ ' + major[i] + '\n';
+        }
+        ret += 'You can earn each bonus once, for a total of up to ' + major.length * 5 + ' XP.\n\n';
+        ret += '**Quest Flavor**\n';
+        if ($('mode').value == 'Glitch') {
+            ret += "1/chapter, when you're in focus, you can earn a 1 XP for yourself and 1 XP for the quest when:";
+        } else {
+            ret += '1/chapter, you can earn a bonus XP towards this quest when:';
+        }
+        for (var i = 0; i < flavor.length; ++i) {
+            ret += '\n:' + flavor[i][0] + ':';
+            if (flavor[i][1]) {
+                ret += ':' + flavor[i][1] + ':';
+            }
+            ret += ' ' + flavor[i][2];
+        }
+        if ($('mode').value == 'Glitch') {
+            ret += '\n…and so can any other player, 1/chapter, if they substitute their PC for yours or otherwise involve them.';
+        }
     }
     return ret;
 }
@@ -97,14 +107,14 @@ const colors = ['purple', 'red', 'blue', 'gold', 'green', 'orange', 'silver', 'b
 const FLAVOR_RE = / *(?::(purple|red|blue|gold|green|orange|silver|black):)? *(?::(purple|red|blue|gold|green|orange|silver|black):)? *(.*)/i;
 
 const ANYTIME = {
-    purple: ['<p>There’s something you’re working on:</p>', '<p>You can earn a bonus XP towards this quest at any time (but only once per scene/15 minutes) by explaining away what you’ve been doing or trying for in the current scene as part of that thing you’re doing.</p><p>Pick a standard phrase to indicate this, and then just say that phrase or some close variant when you want to claim the bonus.</p><p>What’s your phrase?</p>', '<p>The idea is that by saying that, you either confirm that something is about the thing you’re working on, or you make yourself a little goofy and perhaps overly earnest.</p>'],
-    red: ['<p>There’s something that just rivets your attention when it happens; or when you think about it; or when something fits your thoughts about it.</p><p>Something you love. Something you fear. Something like...</p>', '<p>Pick a catchphrase for this. You don’t have to use the exact same catchphrase every time, but it’s the core of your experience here. It’s what you say to show that your attention has been totally caught.</p>', '<p>You can earn a bonus XP towards this quest at any time (but only once per scene/15 minutes) with an emote or a statement that goes basically like that!</p>'],
-    blue: ['<p>There’s something you’re always thinking about. It’s a lens that you see everything else through.</p>', '<p>You can earn a bonus XP towards this quest at any time (but only once per scene/15 minutes) by <b>proposing a new theory about that thing you’re always thinking about</b>.</p><p>Make sure to actually stop and consider the theory—I mean, it’s OK if someone stops you, but the point isn’t to come up with something goofy to say, the point is to come up with new thoughts to <i>genuinely</i> consider.</p>'],
-    gold: ['<p>There’s something you’re doing:</p>', '<p>...and you get really worked up over it. Well, you do, or the world does. Ridiculous, absurd things happen. Things get hectic.</p><p>So, look. Arrange for a sign.</p><p>It should say “<b>Over the Top</b>.”</p><p>You can earn a bonus XP towards this quest at any time (but only once per scene/15 minutes) when your quest, or its consequences, or what you do about it, gets a little over the top.</p><p>Or, for that matter, when you <i>decide</i> to make them a little over the top.</p><p>When that happens, hold up the sign or otherwise declare/observe that things have</p><p>gotten over the top and you can claim the XP.</p><p>You don’t even have to say anything in character! You just have to be willing to hold up a sign. It’s even OK if sometimes you’re being ironic or making a suggestion instead of an observation, as long as an observation is more typical.</p>'],
-    green: ['<p>You’re torn between two worlds or two selves; between:</p>', '<p>and</p>', '<p>Ideally, you’ll make a sign for this—a reversible card, which you could in theory have on the table in front of you in play to show which state you’re in. You can earn a bonus XP at any time (though only once per scene/15 minutes) by flipping the card, showing that you’re moving between the two states.</p><p>If you can’t actually keep the card in front of you, holding up the card with the relevant side facing people or just saying or emoting something appropriate can earn you the XP instead.</p>'],
-    orange: ['<p>There’s something you’re trying to do or be. It’s probably even a good thing!</p><p>...but this quest comes with a psychological or social burden—a private cross to bear. Something you can’t handle as well as you like to pretend. Something you have trouble processing. When you’re saying or emoting <i>this</i> to everyone...</p>', '<p>Some deeply- or shallowly-buried part of you is actually thinking this:</p>', '<p>Create or pick out a two-sided sign: one side is your public face, the other shows your hidden thoughts. You can earn a bonus XP at any time (though only once per 15 minutes/scene) by expressing that emotion—normally, by holding up the sign.</p><p>The back side of the sign reminds you of your flaws. If you’re not playing in a place where you can actually hold up the sign, it’s OK to just remind yourself quietly of what it says, or, if you must, ignore the back side in its entirety.</p>'],
-    silver: ['<p>There’s something you just have to live through, day by day.</p>', '<p>And there’s something—some experience or memory—that helps mark out those days. There is something that draws your attention when this quest casts its shadow or its light upon your life.</p><p>You can earn a bonus XP towards this quest at any time (but only once per scene/15 minutes) by directing attention to this experience. This usually relies on a specific catch phrase—e.g., your attention drifts to the birds flying out over Big Lake, and you say, “Listen to those birds.”</p><p>...or whatever.</p><p>What catch phrase do you use?</p>', ''],
-    black: ['<p>There’s something going on. You think it means... you think it... it <i>relates</i> to...</p>', '<p>You can earn a bonus XP towards this quest at any time (though only once per scene/15 minutes) by declaring that you can feel the touch of it, the thing, the it, the miracle, the strangeness, the dissociation, the unnameable, the it, the thing</p><p>—you can phrase it another way; just give some indication that you’re triggering this quest condition—</p><p>and then free-associating for a few moments about what your character is experiencing, feeling, thinking.</p><p>Talk about being cold, or warm; talk about visions; whatever. Clenching muscles in your arms. Hunger in the sky. Whatever. Random rambles and chill sensations across your back, gnashing stars in the glory beyond the world. That kind of experience, the taste of bugs chattering in the summer, and that brings you in a bonus XP for this quest.</p>'],
+    purple: ['There’s something you’re working on:', 'You can earn a bonus XP towards this quest at any time (but only once per scene/15 minutes) by explaining away what you’ve been doing or trying for in the current scene as part of that thing you’re doing.</p><p>Pick a standard phrase to indicate this, and then just say that phrase or some close variant when you want to claim the bonus.</p><p>What’s your phrase?', 'The idea is that by saying that, you either confirm that something is about the thing you’re working on, or you make yourself a little goofy and perhaps overly earnest.'],
+    red: ['There’s something that just rivets your attention when it happens; or when you think about it; or when something fits your thoughts about it.</p><p>Something you love. Something you fear. Something like...', 'Pick a catchphrase for this. You don’t have to use the exact same catchphrase every time, but it’s the core of your experience here. It’s what you say to show that your attention has been totally caught.', 'You can earn a bonus XP towards this quest at any time (but only once per scene/15 minutes) with an emote or a statement that goes basically like that!'],
+    blue: ['There’s something you’re always thinking about. It’s a lens that you see everything else through.', 'You can earn a bonus XP towards this quest at any time (but only once per scene/15 minutes) by <b>proposing a new theory about that thing you’re always thinking about</b>.</p><p>Make sure to actually stop and consider the theory—I mean, it’s OK if someone stops you, but the point isn’t to come up with something goofy to say, the point is to come up with new thoughts to <i>genuinely</i> consider.'],
+    gold: ['There’s something you’re doing:', '...and you get really worked up over it. Well, you do, or the world does. Ridiculous, absurd things happen. Things get hectic.</p><p>So, look. Arrange for a sign.</p><p>It should say “<b>Over the Top</b>.”</p><p>You can earn a bonus XP towards this quest at any time (but only once per scene/15 minutes) when your quest, or its consequences, or what you do about it, gets a little over the top.</p><p>Or, for that matter, when you <i>decide</i> to make them a little over the top.</p><p>When that happens, hold up the sign or otherwise declare/observe that things have</p><p>gotten over the top and you can claim the XP.</p><p>You don’t even have to say anything in character! You just have to be willing to hold up a sign. It’s even OK if sometimes you’re being ironic or making a suggestion instead of an observation, as long as an observation is more typical.'],
+    green: ['You’re torn between two worlds or two selves; between:', 'and', 'Ideally, you’ll make a sign for this—a reversible card, which you could in theory have on the table in front of you in play to show which state you’re in. You can earn a bonus XP at any time (though only once per scene/15 minutes) by flipping the card, showing that you’re moving between the two states.</p><p>If you can’t actually keep the card in front of you, holding up the card with the relevant side facing people or just saying or emoting something appropriate can earn you the XP instead.'],
+    orange: ['There’s something you’re trying to do or be. It’s probably even a good thing!</p><p>...but this quest comes with a psychological or social burden—a private cross to bear. Something you can’t handle as well as you like to pretend. Something you have trouble processing. When you’re saying or emoting <i>this</i> to everyone...', 'Some deeply- or shallowly-buried part of you is actually thinking this:', 'Create or pick out a two-sided sign: one side is your public face, the other shows your hidden thoughts. You can earn a bonus XP at any time (though only once per 15 minutes/scene) by expressing that emotion—normally, by holding up the sign.</p><p>The back side of the sign reminds you of your flaws. If you’re not playing in a place where you can actually hold up the sign, it’s OK to just remind yourself quietly of what it says, or, if you must, ignore the back side in its entirety.'],
+    silver: ['There’s something you just have to live through, day by day.', 'And there’s something—some experience or memory—that helps mark out those days. There is something that draws your attention when this quest casts its shadow or its light upon your life.</p><p>You can earn a bonus XP towards this quest at any time (but only once per scene/15 minutes) by directing attention to this experience. This usually relies on a specific catch phrase—e.g., your attention drifts to the birds flying out over Big Lake, and you say, “Listen to those birds.”</p><p>...or whatever.</p><p>What catch phrase do you use?</p>', ''],
+    black: ['There’s something going on. You think it means... you think it... it <i>relates</i> to...', 'You can earn a bonus XP towards this quest at any time (though only once per scene/15 minutes) by declaring that you can feel the touch of it, the thing, the it, the miracle, the strangeness, the dissociation, the unnameable, the it, the thing</p><p>—you can phrase it another way; just give some indication that you’re triggering this quest condition—</p><p>and then free-associating for a few moments about what your character is experiencing, feeling, thinking.</p><p>Talk about being cold, or warm; talk about visions; whatever. Clenching muscles in your arms. Hunger in the sky. Whatever. Random rambles and chill sensations across your back, gnashing stars in the glory beyond the world. That kind of experience, the taste of bugs chattering in the summer, and that brings you in a bonus XP for this quest.'],
 };
 
 function capitalize(s) {
