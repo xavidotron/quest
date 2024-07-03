@@ -1,36 +1,47 @@
-function cardHtml(name, xp, arc, color, anytimep, major, flavor, desc) {
+var quest = {
+	"name": "Name",
+	"xp": 15,
+	"arc": {},
+	"color": "purple",
+	"anytimep": false,
+	"major": [],
+	"flavor": [],
+	"desc": ""
+}
+
+function cardHtml() {
     var ret = '<div style="width: 600px; margin: auto">';
-    ret += '<h2 style="font: 24pt Amarante, cursive; color: #7B310C; text-align: center">' + name + ' (' + xp + ' XP)</h2><p><b>';
-    for (var k in arc) {
+    ret += '<h2 style="font: 24pt Amarante, cursive; color: #7B310C; text-align: center">' + quest.name + ' (' + quest.xp + ' XP)</h2><p><b>';
+    for (var k in quest.arc) {
         ret += k + ': ';
-        for (var i = 0; i < arc[k].length; ++i) {
-            ret += '<img src="http://xavid.us/' + arc[k][i] + '.png" width="30" style="vertical-align: middle">';
+        for (var i = 0; i < quest.arc[k].length; ++i) {
+            ret += '<img src="http://xavid.us/' + quest.arc[k][i] + '.png" width="30" style="vertical-align: middle">';
         }
         ret += '<br />';
     }
     ret += '</b></p>';
-    if (desc) {
+    if (quest.desc) {
         const p = '<p style="font: 12pt Tinos, serif">'
-        ret += p + desc.replace(/\n\n/g, '</p>'+p) + '</p>';
+        ret += p + quest.desc.replace(/\n\n/g, '</p>'+p) + '</p>';
     }
-    ret += '<div style="background: url(http://xavid.us/' + color + '-card.png) 0px 0px/600px; height: 600px; width: 600px; position: relative; -webkit-print-color-adjust: exact">';
-    ret += '<div style="height: 0; overflow: visible"><img src="http://xavid.us/' + xp + '.png" style="position: relative; left: 500px; width: 100px" /></div>';
-    ret += '<div style="font: bold 18pt Droid Serif, serif; color: black; text-align: center; padding: 55px 140px 48px">'+ name + '</div>';
+    ret += '<div style="background: url(http://xavid.us/' + quest.color + '-card.png) 0px 0px/600px; height: 600px; width: 600px; position: relative; -webkit-print-color-adjust: exact">';
+    ret += '<div style="height: 0; overflow: visible"><img src="http://xavid.us/' + quest.xp + '.png" style="position: relative; left: 500px; width: 100px" /></div>';
+    ret += '<div style="font: bold 18pt Droid Serif, serif; color: black; text-align: center; padding: 55px 140px 48px">'+ quest.name + '</div>';
     ret += '<div style="margin: 0px 40px; width: 440px; font: 10pt Tinos, serif; color: black">';
-    if (anytimep) {
+    if (quest.anytimep) {
         ret += '<div style="font: bold 13pt Droid Serif, serif; margin: 0px 0px 5px">Bonus XP</div>';
-        for (let i = 0; i < ANYTIME[color].length; ++i) {
-            ret += '<p>' + ANYTIME[color][i] + '</p>';
-            if (i < major.length && major[i]) {
+        for (let i = 0; i < ANYTIME[quest.color].length; ++i) {
+            ret += '<p>' + ANYTIME[quest.color][i] + '</p>';
+            if (i < quest.major.length && quest.major[i]) {
                 ret += '<center style="font-size: 12pt">' + major[i] + '</center>';
             }
         }
     } else {
         ret += '<div style="font: bold 13pt Droid Serif, serif; margin: 0px 0px 5px">Major Goals</div>The HG can award you 5 XP towards this quest when:<ul style="margin: 0 0 1ex 1em; padding: 0px; list-style: none; text-indent: -1em">';
-        for (var i = 0; i < major.length; ++i) {
-            ret += '<li style="margin: 5px 0">☐ ' + major[i] + '</li>';
+        for (var i = 0; i < quest.major.length; ++i) {
+            ret += '<li style="margin: 5px 0">☐ ' + quest.major[i] + '</li>';
         }
-        ret += '</ul>You can earn each bonus once, for a total of up to ' + major.length * 5 + ' XP.';
+        ret += '</ul>You can earn each bonus once, for a total of up to ' + quest.major.length * 5 + ' XP.';
         ret += '<div style="font: bold 13pt Droid Serif, serif; margin: 20px 0px 5px">Quest Flavor</div>';
         if ($('mode').value == 'Glitch') {
             ret += "1/chapter, when you're in focus, you can earn a 1 XP for yourself and 1 XP for the quest when:";
@@ -38,12 +49,12 @@ function cardHtml(name, xp, arc, color, anytimep, major, flavor, desc) {
             ret += '1/chapter, you can earn a bonus XP towards this quest when:';
         }
         ret += '<ul style="margin: 0 0 1ex 2em; padding: 0px; list-style: none; text-indent: -1em">';
-        for (var i = 0; i < flavor.length; ++i) {
-            ret += '<li style="margin: 5px 0"><img src="http://xavid.us/' + flavor[i][0] + '.png" width="20" style="vertical-align: middle">';
-            if (flavor[i][1]) {
-                ret += '<img src="http://xavid.us/' + flavor[i][1] + '.png" width="20" style="vertical-align: middle">';
+        for (var i = 0; i < quest.flavor.length; ++i) {
+            ret += '<li style="margin: 5px 0"><img src="http://xavid.us/' + quest.flavor[i][0] + '.png" width="20" style="vertical-align: middle">';
+            if (quest.flavor[i][1]) {
+                ret += '<img src="http://xavid.us/' + quest.flavor[i][1] + '.png" width="20" style="vertical-align: middle">';
             }
-            ret += ' ' + flavor[i][2] + '</li>';
+            ret += ' ' + quest.flavor[i][2] + '</li>';
         }
         ret += '</ul>';
         if ($('mode').value == 'Glitch') {
@@ -54,45 +65,45 @@ function cardHtml(name, xp, arc, color, anytimep, major, flavor, desc) {
     return ret;
 }
 
-function cardDiscord(name, xp, arc, color, anytimep, major, flavor, desc) {
-    var ret = '**' + name + ' (' + xp + ') (:' + color + ':)**\n';
-    for (var k in arc) {
+function cardDiscord() {
+    var ret = '**' + quest.name + ' (' + quest.xp + ') (:' + quest.color + ':)**\n';
+    for (var k in quest.arc) {
         ret += k + ': ';
-        for (var i = 0; i < arc[k].length; ++i) {
-            ret += ':' + arc[k][i] + ':';
+        for (var i = 0; i < quest.arc[k].length; ++i) {
+            ret += ':' + quest.arc[k][i] + ':';
         }
         ret += '\n';
     }
     ret += '\n';
-    if (desc) {
-        ret += desc + '\n\n';
+    if (quest.desc) {
+        ret += quest.desc + '\n\n';
     }
-    if (anytimep) {
+    if (quest.anytimep) {
         ret += '**Bonus XP**\n';
-        for (let i = 0; i < ANYTIME[color].length; ++i) {
-            ret += ANYTIME[color][i].replace(/<\/p><p>/g, '\n') + '\n';
-            if (i < major.length && major[i]) {
-                ret += major[i] + '\n';
+        for (let i = 0; i < ANYTIME[quest.color].length; ++i) {
+            ret += ANYTIME[quest.color][i].replace(/<\/p><p>/g, '\n') + '\n';
+            if (i < quest.major.length && quest.major[i]) {
+                ret += quest.major[i] + '\n';
             }
         }
     } else {
         ret += '**Major Goals**\nThe HG can award you 5 XP towards this quest when:\n';
-        for (var i = 0; i < major.length; ++i) {
-            ret += '☐ ' + major[i] + '\n';
+        for (var i = 0; i < quest.major.length; ++i) {
+            ret += '☐ ' + quest.major[i] + '\n';
         }
-        ret += 'You can earn each bonus once, for a total of up to ' + major.length * 5 + ' XP.\n\n';
+        ret += 'You can earn each bonus once, for a total of up to ' + quest.major.length * 5 + ' XP.\n\n';
         ret += '**Quest Flavor**\n';
         if ($('mode').value == 'Glitch') {
             ret += "1/chapter, when you're in focus, you can earn a 1 XP for yourself and 1 XP for the quest when:";
         } else {
             ret += '1/chapter, you can earn a bonus XP towards this quest when:';
         }
-        for (var i = 0; i < flavor.length; ++i) {
-            ret += '\n:' + flavor[i][0] + ':';
-            if (flavor[i][1]) {
-                ret += ':' + flavor[i][1] + ':';
+        for (var i = 0; i < quest.flavor.length; ++i) {
+            ret += '\n:' + quest.flavor[i][0] + ':';
+            if (quest.flavor[i][1]) {
+                ret += ':' + quest.flavor[i][1] + ':';
             }
-            ret += ' ' + flavor[i][2];
+            ret += ' ' + quest.flavor[i][2];
         }
         if ($('mode').value == 'Glitch') {
             ret += '\n…and so can any other player, 1/chapter, if they substitute their PC for yours or otherwise involve them.';
@@ -173,52 +184,24 @@ function update(event) {
     console.log(hashstr);
     history.pushState(null, null,
                       '#' + LZString.compressToEncodedURIComponent(hashstr));
-    
-    var arc = {};
-    for (var i = 1; i <= 5; ++i) {
-        for (var c = 0; c < 8; ++c) {
-            if ($(colors[c] + '.' + i).checked) {
-                if (!(i in arc)) {
-                    arc[i] = [colors[c]];
-                } else {
-                    arc[i].push(colors[c]);
-                }
-            }
-        }
-    }
-    var major = [];
-    if ($('anytime').checked) {
-        for (var i = 1; i <= 2; ++i) {
-            major.push($('at' + i).value);
-        }
-    } else {
-        for (var i = 1; i <= 6; ++i) {
-            if ($('major' + i).value) {
-                major.push($('major' + i).value);
-            }
-        }
-    }
-    var flavor = [];
-    for (var i = 1; i <= 12; ++i) {
-        if ($('flavor' + i).value) {
-            flavor.push([$('cf'+i+'a').value.toLowerCase(), $('cf'+i+'b').value.toLowerCase(), $('flavor' + i).value]);
-        }
-    }
-    var html = cardHtml($('name').value, $('xp').value, arc, $('color').value.toLowerCase(), $('anytime').checked, major, flavor, $('desc').value);
-    let discord = cardDiscord($('name').value, $('xp').value, arc, $('color').value.toLowerCase(), $('anytime').checked, major, flavor, $('desc').value);
+  
+	translateFormToObject();
+	
+    var html = cardHtml();
+    let discord = cardDiscord();
     $('html').value = html;
     $('discord').value = discord;
     $('thing').innerHTML = html;
     document.getElementsByTagName('title')[0].innerText = $('name').value;
 
     let majorblockval = '';
-    for (let i = 1; i <= 6; ++i) {
+    for (let i = 0; i < 6; ++i) {
         majorblockval += document.getElementById('major' + i).value + '\n';
     }
     document.getElementById('majorblock').value = majorblockval;
 
     let flavorblockval = '';
-    for (let i = 1; i <= 12; ++i) {
+    for (let i = 0; i < 12; ++i) {
         let tmp = '';
         const a = document.getElementById('cf' + i + 'a');
         if (a.value) {
@@ -265,4 +248,134 @@ function init() {
     }
     
     update();
+}
+
+function translateFormToObject() {
+	var arc = {};
+    for (var i = 0; i < 5; ++i) {
+        for (var c = 0; c < 8; ++c) {
+            if ($(colors[c] + '.' + i).checked) {
+                if (!(i in arc)) {
+                    arc[i] = [colors[c]];
+                } else {
+                    arc[i].push(colors[c]);
+                }
+            }
+        }
+    }
+    var major = [];
+    if ($('anytime').checked) {
+        for (var i = 0; i < 2; ++i) {
+            major.push($('at' + i).value);
+        }
+    } else {
+        for (var i = 0; i < 6; ++i) {
+            if ($('major' + i).value) {
+                major.push($('major' + i).value);
+            }
+        }
+    }
+    var flavor = [];
+    for (var i = 0; i < 12; ++i) {
+        if ($('flavor' + i).value) {
+            flavor.push([$('cf'+i+'a').value.toLowerCase(), $('cf'+i+'b').value.toLowerCase(), $('flavor' + i).value]);
+        }
+    }
+	
+	quest.name = $('name').value;
+	quest.xp = $('xp').value;
+	quest.arc = arc;
+	quest.color = $('color').value.toLowerCase();
+	quest.anytimep = $('anytime').checked;
+	quest.major = major;
+	quest.flavor = flavor;
+	quest.desc = $('desc').value;
+}
+
+function translateObjectToForm() {
+	$('name').value = quest.name;
+	$('xp').value = quest.xp;
+	$('color').value = capitalize(quest.color);
+	$('anytime').checked = quest.anytimep;
+	$('desc').value = quest.desc;
+	
+	// Set the arc assignments
+    for (var i = 0; i < 5; ++i) {
+        for (var c = 0; c < 8; ++c) {
+			if ((i in quest.arc) && quest.arc[i].includes(colors[c])) {
+				$(colors[c] + '.' + i).checked = true;
+			} else {	
+				$(colors[c] + '.' + i).checked = false;
+			}
+        }
+    }
+	
+	// Set the major/anytime goals
+	if (quest.anytimep) {
+        for (var i = 0; i < 2; ++i) {
+			if (quest.major[i]) {
+				$('at' + i).value = quest.major[i];
+			} else {
+				$('at' + i).value = "";
+			}
+        }
+	} else {
+        for (var i = 0; i < 6; ++i) {
+			if (quest.major[i]) {
+				$('major' + i).value = quest.major[i];
+			} else {
+				$('major' + i).value = "";
+			}
+        }
+	}
+	
+	// Set the flavors
+    for (var i = 0; i < 12; ++i) {
+        if (quest.flavor[i]) {
+			$('cf'+i+'a').value = capitalize(quest.flavor[i][0]);
+			$('cf'+i+'b').value = capitalize(quest.flavor[i][1]);
+			$('flavor' + i).value = quest.flavor[i][2];
+        } else {
+			$('cf'+i+'a').value = 'Purple';
+			$('cf'+i+'b').value = '';
+			$('flavor' + i).value = '';
+		}
+    }
+	
+	update();
+}
+
+function uploadJSON() {
+	$('importFile').click();
+}
+
+function importJSON() {
+	let files = $('importFile').files;
+	if (!files.length) {
+		alert('No file selected!');
+		return;
+	}
+	
+	var fr = new FileReader();
+
+	fr.onload = function(e) {
+		quest = JSON.parse(e.target.result);
+		translateObjectToForm()
+	}
+
+	fr.readAsText(files[0]);
+	
+	$('importFile').value = ""; // Clear the file after importing it
+}
+
+function exportJSON() {
+	var a = document.createElement("a");
+    var file = new Blob([JSON.stringify(quest, null, 2)], {type: 'application/json'});
+    a.href = URL.createObjectURL(file);
+    a.download = quest.name + '.json';
+    a.click();
+}
+
+function capitalize(str) {
+	return str.charAt(0).toUpperCase() + str.slice(1)
 }
