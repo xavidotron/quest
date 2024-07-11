@@ -43,8 +43,8 @@
         content: "Close ";
       }
       #toggle:checked ~ #right {
-	  float: right;
-	  width: 600px;
+        float: right;
+        width: 600px;
       }
       @media print {
         label[for="toggle"] {
@@ -63,7 +63,7 @@
         display: block;
       }
       input[type="text"] {
-	  width: 800px;
+        width: 800px;
       }
       form {
         display: none;
@@ -116,11 +116,11 @@
 
       <h2>Arc Assignments</h2>
       <b>
-      1: <label><input type="checkbox" id="purple.0" />Purple</label> <label><input type="checkbox" id="red.0" />Red</label> <label><input type="checkbox" id="blue.0" />Blue</label> <label><input type="checkbox" id="gold.0" />Gold</label> <label><input type="checkbox" id="green.0" />Green</label> <label><input type="checkbox" id="orange.0" />Orange</label> <label><input type="checkbox" id="silver.0" />Silver</label> <label><input type="checkbox" id="black.0" />Black</label><br />
-      2: <label><input type="checkbox" id="purple.1" />Purple</label> <label><input type="checkbox" id="red.1" />Red</label> <label><input type="checkbox" id="blue.1" />Blue</label> <label><input type="checkbox" id="gold.1" />Gold</label> <label><input type="checkbox" id="green.1" />Green</label> <label><input type="checkbox" id="orange.1" />Orange</label> <label><input type="checkbox" id="silver.1" />Silver</label> <label><input type="checkbox" id="black.1" />Black</label><br />
-      3: <label><input type="checkbox" id="purple.2" />Purple</label> <label><input type="checkbox" id="red.2" />Red</label> <label><input type="checkbox" id="blue.2" />Blue</label> <label><input type="checkbox" id="gold.2" />Gold</label> <label><input type="checkbox" id="green.2" />Green</label> <label><input type="checkbox" id="orange.2" />Orange</label> <label><input type="checkbox" id="silver.2" />Silver</label> <label><input type="checkbox" id="black.2" />Black</label><br />
-      4: <label><input type="checkbox" id="purple.3" />Purple</label> <label><input type="checkbox" id="red.3" />Red</label> <label><input type="checkbox" id="blue.3" />Blue</label> <label><input type="checkbox" id="gold.3" />Gold</label> <label><input type="checkbox" id="green.3" />Green</label> <label><input type="checkbox" id="orange.3" />Orange</label> <label><input type="checkbox" id="silver.3" />Silver</label> <label><input type="checkbox" id="black.3" />Black</label><br />
-      5: <label><input type="checkbox" id="purple.4" />Purple</label> <label><input type="checkbox" id="red.4" />Red</label> <label><input type="checkbox" id="blue.4" />Blue</label> <label><input type="checkbox" id="gold.4" />Gold</label> <label><input type="checkbox" id="green.4" />Green</label> <label><input type="checkbox" id="orange.4" />Orange</label> <label><input type="checkbox" id="silver.4" />Silver</label> <label><input type="checkbox" id="black.4" />Black</label><br />
+      1: <label><input type="checkbox" id="purple.1" />Purple</label> <label><input type="checkbox" id="red.1" />Red</label> <label><input type="checkbox" id="blue.1" />Blue</label> <label><input type="checkbox" id="gold.1" />Gold</label> <label><input type="checkbox" id="green.1" />Green</label> <label><input type="checkbox" id="orange.1" />Orange</label> <label><input type="checkbox" id="silver.1" />Silver</label> <label><input type="checkbox" id="black.1" />Black</label><br />
+      2: <label><input type="checkbox" id="purple.2" />Purple</label> <label><input type="checkbox" id="red.2" />Red</label> <label><input type="checkbox" id="blue.2" />Blue</label> <label><input type="checkbox" id="gold.2" />Gold</label> <label><input type="checkbox" id="green.2" />Green</label> <label><input type="checkbox" id="orange.2" />Orange</label> <label><input type="checkbox" id="silver.2" />Silver</label> <label><input type="checkbox" id="black.2" />Black</label><br />
+      3: <label><input type="checkbox" id="purple.3" />Purple</label> <label><input type="checkbox" id="red.3" />Red</label> <label><input type="checkbox" id="blue.3" />Blue</label> <label><input type="checkbox" id="gold.3" />Gold</label> <label><input type="checkbox" id="green.3" />Green</label> <label><input type="checkbox" id="orange.3" />Orange</label> <label><input type="checkbox" id="silver.3" />Silver</label> <label><input type="checkbox" id="black.3" />Black</label><br />
+      4: <label><input type="checkbox" id="purple.4" />Purple</label> <label><input type="checkbox" id="red.4" />Red</label> <label><input type="checkbox" id="blue.4" />Blue</label> <label><input type="checkbox" id="gold.4" />Gold</label> <label><input type="checkbox" id="green.4" />Green</label> <label><input type="checkbox" id="orange.4" />Orange</label> <label><input type="checkbox" id="silver.4" />Silver</label> <label><input type="checkbox" id="black.4" />Black</label><br />
+      5: <label><input type="checkbox" id="purple.5" />Purple</label> <label><input type="checkbox" id="red.5" />Red</label> <label><input type="checkbox" id="blue.5" />Blue</label> <label><input type="checkbox" id="gold.5" />Gold</label> <label><input type="checkbox" id="green.5" />Green</label> <label><input type="checkbox" id="orange.5" />Orange</label> <label><input type="checkbox" id="silver.5" />Silver</label> <label><input type="checkbox" id="black.5" />Black</label><br />
       </b>
 
       <h2>Description</h2>
@@ -185,12 +185,11 @@
       </div>
    
     </form>
-	  
-	  <h2>Save and Load</h2>
-	  <div class="indiv json">
-	  <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importJSON()" />
-	  <button id="importButton" onclick="uploadJSON()">Import JSON</button>
-	  <button onclick="exportJSON()">Export JSON</button>
-	  </div>
+    <h2>Save and Load</h2>
+    <div class="indiv json">
+      <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importJSON()" />
+      <button id="importButton" onclick="uploadJSON()">Import JSON</button>
+      <button onclick="exportJSON()">Export JSON</button>
+    </div>
   </body>
 </html>

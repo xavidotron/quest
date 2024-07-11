@@ -1,15 +1,4 @@
-var quest = {
-	"name": "Name",
-	"xp": 15,
-	"arc": {},
-	"color": "purple",
-	"anytimep": false,
-	"major": [],
-	"flavor": [],
-	"desc": ""
-}
-
-function cardHtml() {
+function cardHtml(quest) {
     var ret = '<div style="width: 600px; margin: auto">';
     ret += '<h2 style="font: 24pt Amarante, cursive; color: #7B310C; text-align: center">' + quest.name + ' (' + quest.xp + ' XP)</h2><p><b>';
     for (var k in quest.arc) {
@@ -65,7 +54,7 @@ function cardHtml() {
     return ret;
 }
 
-function cardDiscord() {
+function cardDiscord(quest) {
     var ret = '**' + quest.name + ' (' + quest.xp + ') (:' + quest.color + ':)**\n';
     for (var k in quest.arc) {
         ret += k + ': ';
@@ -184,11 +173,11 @@ function update(event) {
     console.log(hashstr);
     history.pushState(null, null,
                       '#' + LZString.compressToEncodedURIComponent(hashstr));
-  
-	translateFormToObject();
-	
-    var html = cardHtml();
-    let discord = cardDiscord();
+
+    var quest = translateFormToObject();
+
+    var html = cardHtml(quest);
+    let discord = cardDiscord(quest);
     $('html').value = html;
     $('discord').value = discord;
     $('thing').innerHTML = html;
@@ -254,7 +243,7 @@ function translateFormToObject() {
 	var arc = {};
     for (var i = 0; i < 5; ++i) {
         for (var c = 0; c < 8; ++c) {
-            if ($(colors[c] + '.' + i).checked) {
+            if ($(colors[c] + '.' + (i + 1)).checked) {
                 if (!(i in arc)) {
                     arc[i] = [colors[c]];
                 } else {
@@ -281,95 +270,98 @@ function translateFormToObject() {
             flavor.push([$('cf'+i+'a').value.toLowerCase(), $('cf'+i+'b').value.toLowerCase(), $('flavor' + i).value]);
         }
     }
-	
-	quest.name = $('name').value;
-	quest.xp = $('xp').value;
-	quest.arc = arc;
-	quest.color = $('color').value.toLowerCase();
-	quest.anytimep = $('anytime').checked;
-	quest.major = major;
-	quest.flavor = flavor;
-	quest.desc = $('desc').value;
+
+    return {
+      "name": $('name').value,
+      "xp": $('xp').value,
+      "arc": arc,
+      "color": $('color').value.toLowerCase(),
+      "anytimep": $('anytime').checked,
+      "major": major,
+      "flavor": flavor,
+      "desc": $('desc').value
+    }
 }
 
-function translateObjectToForm() {
-	$('name').value = quest.name;
-	$('xp').value = quest.xp;
-	$('color').value = capitalize(quest.color);
-	$('anytime').checked = quest.anytimep;
-	$('desc').value = quest.desc;
-	
-	// Set the arc assignments
+function translateObjectToForm(quest) {
+    $('name').value = quest.name;
+    $('xp').value = quest.xp;
+    $('color').value = capitalize(quest.color);
+    $('anytime').checked = quest.anytimep;
+    $('desc').value = quest.desc;
+    
+    // Set the arc assignments
     for (var i = 0; i < 5; ++i) {
         for (var c = 0; c < 8; ++c) {
-			if ((i in quest.arc) && quest.arc[i].includes(colors[c])) {
-				$(colors[c] + '.' + i).checked = true;
-			} else {	
-				$(colors[c] + '.' + i).checked = false;
-			}
+          if ((i in quest.arc) && quest.arc[i].includes(colors[c])) {
+            $(colors[c] + '.' + (i + 1)).checked = true;
+          } else {	
+            $(colors[c] + '.' + (i + 1)).checked = false;
+          }
         }
     }
-	
-	// Set the major/anytime goals
-	if (quest.anytimep) {
+    
+    // Set the major/anytime goals
+    if (quest.anytimep) {
         for (var i = 0; i < 2; ++i) {
-			if (quest.major[i]) {
-				$('at' + i).value = quest.major[i];
-			} else {
-				$('at' + i).value = "";
-			}
+      if (quest.major[i]) {
+        $('at' + i).value = quest.major[i];
+      } else {
+        $('at' + i).value = "";
+      }
         }
-	} else {
+    } else {
         for (var i = 0; i < 6; ++i) {
-			if (quest.major[i]) {
-				$('major' + i).value = quest.major[i];
-			} else {
-				$('major' + i).value = "";
-			}
+      if (quest.major[i]) {
+        $('major' + i).value = quest.major[i];
+      } else {
+        $('major' + i).value = "";
+      }
         }
-	}
-	
-	// Set the flavors
-    for (var i = 0; i < 12; ++i) {
-        if (quest.flavor[i]) {
-			$('cf'+i+'a').value = capitalize(quest.flavor[i][0]);
-			$('cf'+i+'b').value = capitalize(quest.flavor[i][1]);
-			$('flavor' + i).value = quest.flavor[i][2];
-        } else {
-			$('cf'+i+'a').value = 'Purple';
-			$('cf'+i+'b').value = '';
-			$('flavor' + i).value = '';
-		}
     }
-	
-	update();
+    
+    // Set the flavors
+    for (var i = 0; i < 12; ++i) {
+      if (quest.flavor[i]) {
+        $('cf'+i+'a').value = capitalize(quest.flavor[i][0]);
+        $('cf'+i+'b').value = capitalize(quest.flavor[i][1]);
+        $('flavor' + i).value = quest.flavor[i][2];
+      } else {
+        $('cf'+i+'a').value = 'Purple';
+        $('cf'+i+'b').value = '';
+        $('flavor' + i).value = '';
+      }
+    }
+
+    update();
 }
 
 function uploadJSON() {
-	$('importFile').click();
+    $('importFile').click();
 }
 
 function importJSON() {
-	let files = $('importFile').files;
-	if (!files.length) {
-		alert('No file selected!');
-		return;
-	}
-	
-	var fr = new FileReader();
+    let files = $('importFile').files;
+    if (!files.length) {
+      alert('No file selected!');
+      return;
+    }
+    
+    var fr = new FileReader();
 
-	fr.onload = function(e) {
-		quest = JSON.parse(e.target.result);
-		translateObjectToForm()
-	}
-
-	fr.readAsText(files[0]);
-	
-	$('importFile').value = ""; // Clear the file after importing it
+    fr.onload = function(e) {
+      var quest = JSON.parse(e.target.result);
+      translateObjectToForm(quest);
+    }
+    
+    fr.readAsText(files[0]);
+    
+    $('importFile').value = ""; // Clear the file after importing it
 }
 
 function exportJSON() {
-	var a = document.createElement("a");
+    var quest = translateFormToObject();
+    var a = document.createElement("a");
     var file = new Blob([JSON.stringify(quest, null, 2)], {type: 'application/json'});
     a.href = URL.createObjectURL(file);
     a.download = quest.name + '.json';
@@ -377,5 +369,5 @@ function exportJSON() {
 }
 
 function capitalize(str) {
-	return str.charAt(0).toUpperCase() + str.slice(1)
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
