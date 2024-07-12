@@ -43,8 +43,8 @@
         content: "Close ";
       }
       #toggle:checked ~ #right {
-	  float: right;
-	  width: 600px;
+        float: right;
+        width: 600px;
       }
       @media print {
         label[for="toggle"] {
@@ -63,7 +63,7 @@
         display: block;
       }
       input[type="text"] {
-	  width: 800px;
+        width: 800px;
       }
       form {
         display: none;
@@ -128,17 +128,20 @@
 
       <h2 class="storyline">Major Goals</h2>
       <div class="indiv storyline">
+      <input type="text" id="major0" /><br />
       <input type="text" id="major1" /><br />
       <input type="text" id="major2" /><br />
       <input type="text" id="major3" /><br />
       <input type="text" id="major4" /><br />
-      <input type="text" id="major5" /><br />
-      <input type="text" id="major6" />
+      <input type="text" id="major5" />
       </div>
       <textarea class="blockmode storyline" id="majorblock"></textarea>
 
       <h2 class="storyline">Quest Flavor</h2>
       <div class="indiv storyline">
+      <select id="cf0a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+      <select id="cf0b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
+<input type="text" id="flavor0" /><br />
       <select id="cf1a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
       <select id="cf1b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
 <input type="text" id="flavor1" /><br />
@@ -171,19 +174,22 @@
 <input type="text" id="flavor10" /><br />
       <select id="cf11a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
       <select id="cf11b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
-<input type="text" id="flavor11" /><br />
-      <select id="cf12a"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
-      <select id="cf12b"><option></option><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select>
-      <input type="text" id="flavor12" />
+<input type="text" id="flavor11" />
       </div>
       <textarea class="blockmode storyline" id="flavorblock"></textarea>
 
       <h3 class="anytime">Anytime Quest Blanks</h3>
       <div class="indiv anytime">
-      <input type="text" id="at1" /><br />
-      <input type="text" id="at2" />
+      <input type="text" id="at0" /><br />
+      <input type="text" id="at1" />
       </div>
-      
+   
     </form>
+    <h2>Save and Load</h2>
+    <div class="indiv json">
+      <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importJSON()" />
+      <button id="importButton" onclick="uploadJSON()">Import JSON</button>
+      <button onclick="exportJSON()">Export JSON</button>
+    </div>
   </body>
 </html>
