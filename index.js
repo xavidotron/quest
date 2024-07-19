@@ -4,7 +4,7 @@ function cardHtml(quest) {
     for (var k in quest.arc) {
         ret += k + ': ';
         for (var i = 0; i < quest.arc[k].length; ++i) {
-            ret += '<img src="http://xavid.us/' + quest.arc[k][i] + '.png" width="30" style="vertical-align: middle">';
+            ret += '<img src="img/' + quest.arc[k][i] + '.png" width="30" style="vertical-align: middle">';
         }
         ret += '<br />';
     }
@@ -13,8 +13,34 @@ function cardHtml(quest) {
         const p = '<p style="font: 12pt Tinos, serif">'
         ret += p + quest.desc.replace(/\n\n/g, '</p>'+p) + '</p>';
     }
-    ret += '<div style="background: url(http://xavid.us/' + quest.color + '-card.png) 0px 0px/600px; height: 600px; width: 600px; position: relative; -webkit-print-color-adjust: exact">';
-    ret += '<div style="height: 0; overflow: visible"><img src="http://xavid.us/' + quest.xp + '.png" style="position: relative; left: 500px; width: 100px" /></div>';
+    ret += '<div style="background: url(img/' + quest.color + '-card.png) 0px 0px/600px; height: 600px; width: 600px; position: relative; -webkit-print-color-adjust: exact">';
+    //ret += '<div style="height: 0; overflow: visible"><img src="img/' + quest.xp + '.png" style="position: relative; left: 500px; width: 100px" /></div>';
+    ret += '<div style="height: 0; position: relative; left: 500px; width: 100px; top: 56px; overflow: visible">'
+    
+    var xpLeftToShow = quest.xp;
+    
+    // First, display biggest XP tracker possible
+    for (var i = 0; i < standardXP.length; ++i) {
+      if (standardXP[i] <= xpLeftToShow) {
+        var biggestStandardXP = standardXP[i];
+        xpLeftToShow -= biggestStandardXP;
+        ret += '<img src="img/' + biggestStandardXP + '.png" style="width: 100px;" />';
+        break;
+      }
+    }
+    
+    // Next, fill up in increments of 5
+    while (xpLeftToShow >= 5) {
+      ret += '<img src="img/5.png" style="width: 100px;" />';
+      xpLeftToShow -= 5;
+    }
+    
+    // Finally, show the remainder.
+    if (xpLeftToShow > 0) {
+      ret += '<img src="img/' + xpLeftToShow + '.png" style="width: 100px;" />';
+    }
+    
+    ret += '</div>';
     ret += '<div style="font: bold 18pt Droid Serif, serif; color: black; text-align: center; padding: 55px 140px 48px">'+ quest.name + '</div>';
     ret += '<div style="margin: 0px 40px; width: 440px; font: 10pt Tinos, serif; color: black">';
     if (quest.anytimep) {
@@ -39,9 +65,9 @@ function cardHtml(quest) {
         }
         ret += '<ul style="margin: 0 0 1ex 2em; padding: 0px; list-style: none; text-indent: -1em">';
         for (var i = 0; i < quest.flavor.length; ++i) {
-            ret += '<li style="margin: 5px 0"><img src="http://xavid.us/' + quest.flavor[i][0] + '.png" width="20" style="vertical-align: middle">';
+            ret += '<li style="margin: 5px 0"><img src="img/' + quest.flavor[i][0] + '.png" width="20" style="vertical-align: middle">';
             if (quest.flavor[i][1]) {
-                ret += '<img src="http://xavid.us/' + quest.flavor[i][1] + '.png" width="20" style="vertical-align: middle">';
+                ret += '<img src="img/' + quest.flavor[i][1] + '.png" width="20" style="vertical-align: middle">';
             }
             ret += ' ' + quest.flavor[i][2] + '</li>';
         }
@@ -116,6 +142,8 @@ const ANYTIME = {
     silver: ['There’s something you just have to live through, day by day.', 'And there’s something—some experience or memory—that helps mark out those days. There is something that draws your attention when this quest casts its shadow or its light upon your life.</p><p>You can earn a bonus XP towards this quest at any time (but only once per scene/15 minutes) by directing attention to this experience. This usually relies on a specific catch phrase—e.g., your attention drifts to the birds flying out over Big Lake, and you say, “Listen to those birds.”</p><p>...or whatever.</p><p>What catch phrase do you use?</p>', ''],
     black: ['There’s something going on. You think it means... you think it... it <i>relates</i> to...', 'You can earn a bonus XP towards this quest at any time (though only once per scene/15 minutes) by declaring that you can feel the touch of it, the thing, the it, the miracle, the strangeness, the dissociation, the unnameable, the it, the thing</p><p>—you can phrase it another way; just give some indication that you’re triggering this quest condition—</p><p>and then free-associating for a few moments about what your character is experiencing, feeling, thinking.</p><p>Talk about being cold, or warm; talk about visions; whatever. Clenching muscles in your arms. Hunger in the sky. Whatever. Random rambles and chill sensations across your back, gnashing stars in the glory beyond the world. That kind of experience, the taste of bugs chattering in the summer, and that brings you in a bonus XP for this quest.'],
 };
+
+const standardXP = [60, 50, 45, 40, 35, 25, 20, 15];
 
 function capitalize(s) {
     if (!s) {
@@ -289,6 +317,13 @@ function translateObjectToForm(quest) {
     $('color').value = capitalize(quest.color);
     $('anytime').checked = quest.anytimep;
     $('desc').value = quest.desc;
+    
+    // Set non-standard XP checkbox if needed
+    if (standardXP.includes(parseInt(quest.xp))) {
+      $('nonstandardXp').checked = false;
+    } else {
+      $('nonstandardXp').checked = true;
+    }
     
     // Set the arc assignments
     for (var i = 0; i < 5; ++i) {
