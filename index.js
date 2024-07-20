@@ -1,10 +1,12 @@
+const imgUrl = 'http://xavid.us/img/';
+
 function cardHtml(quest) {
     var ret = '<div style="width: 600px; margin: auto">';
     ret += '<h2 style="font: 24pt Amarante, cursive; color: #7B310C; text-align: center">' + quest.name + ' (' + quest.xp + ' XP)</h2><p><b>';
     for (var k in quest.arc) {
         ret += k + ': ';
         for (var i = 0; i < quest.arc[k].length; ++i) {
-            ret += '<img src="img/' + quest.arc[k][i] + '.png" width="30" style="vertical-align: middle">';
+            ret += '<img src="' + imgUrl + quest.arc[k][i] + '.png" width="30" style="vertical-align: middle">';
         }
         ret += '<br />';
     }
@@ -13,8 +15,8 @@ function cardHtml(quest) {
         const p = '<p style="font: 12pt Tinos, serif">'
         ret += p + quest.desc.replace(/\n\n/g, '</p>'+p) + '</p>';
     }
-    ret += '<div style="background: url(img/' + quest.color + '-card.png) 0px 0px/600px; height: 600px; width: 600px; position: relative; -webkit-print-color-adjust: exact">';
-    //ret += '<div style="height: 0; overflow: visible"><img src="img/' + quest.xp + '.png" style="position: relative; left: 500px; width: 100px" /></div>';
+    ret += '<div style="background: url(' + imgUrl + quest.color + '-card.png) 0px 0px/600px; height: 600px; width: 600px; position: relative; -webkit-print-color-adjust: exact">';
+    //ret += '<div style="height: 0; overflow: visible"><img src="' + imgUrl + quest.xp + '.png" style="position: relative; left: 500px; width: 100px" /></div>';
     ret += '<div style="height: 0; position: relative; left: 500px; width: 100px; top: 56px; overflow: visible">'
     
     var xpLeftToShow = quest.xp;
@@ -24,7 +26,7 @@ function cardHtml(quest) {
       if (standardXP[i] <= xpLeftToShow) {
         var biggestStandardXP = standardXP[i];
         xpLeftToShow -= biggestStandardXP;
-        ret += '<img src="img/' + biggestStandardXP + '.png" style="width: 100px;" />';
+        ret += '<img src="' + imgUrl + biggestStandardXP + '.png" style="width: 100px;" />';
         break;
       }
     }
@@ -37,7 +39,7 @@ function cardHtml(quest) {
     
     // Finally, show the remainder.
     if (xpLeftToShow > 0) {
-      ret += '<img src="img/' + xpLeftToShow + '.png" style="width: 100px;" />';
+      ret += '<img src="' + imgUrl + xpLeftToShow + '.png" style="width: 100px;" />';
     }
     
     ret += '</div>';
@@ -65,9 +67,9 @@ function cardHtml(quest) {
         }
         ret += '<ul style="margin: 0 0 1ex 2em; padding: 0px; list-style: none; text-indent: -1em">';
         for (var i = 0; i < quest.flavor.length; ++i) {
-            ret += '<li style="margin: 5px 0"><img src="img/' + quest.flavor[i][0] + '.png" width="20" style="vertical-align: middle">';
+            ret += '<li style="margin: 5px 0"><img src="' + imgUrl + quest.flavor[i][0] + '.png" width="20" style="vertical-align: middle">';
             if (quest.flavor[i][1]) {
-                ret += '<img src="img/' + quest.flavor[i][1] + '.png" width="20" style="vertical-align: middle">';
+                ret += '<img src="' + imgUrl + quest.flavor[i][1] + '.png" width="20" style="vertical-align: middle">';
             }
             ret += ' ' + quest.flavor[i][2] + '</li>';
         }
