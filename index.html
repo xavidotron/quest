@@ -95,6 +95,12 @@
       #anytime:checked ~ .anytime {
         display: block;
       }
+      #xp > .nonstandardXp {
+        display: none;
+      }
+      #nonstandardXp:checked ~ label .nonstandardXp {
+        display: block;
+      }
     </style>
     <script type="text/javascript" src="lz-string.js"></script>
     <script type="text/javascript" src="index.js"></script>
@@ -107,12 +113,32 @@
     <textarea class="copyable" id="discord" readonly></textarea>
     </div>
     <form onchange="update(event)">
-      <label>Name: <input type="text" id="name" value="Name" /></label><br />
-      <label>XP: <select id="xp"><option>15</option><option>20</option><option>25</option><option>35</option><option>40</option><option>45</option><option>50</option><option>60</option></select></label>
-      <label>Card Color: <select id="color"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select></label>
-      <label>Game Mode: <select id="mode"><option>Chuubo's</option><option>Glitch</option></select></label>
       <input type="checkbox" id="anytime" name="anytime" /><label for="anytime">Make Anytime Quest</label>
       <input type="checkbox" id="block" name="block" class="storyline" /><label for="block" class="storyline">Edit as Block</label>
+      <input type="checkbox" id="nonstandardXp" name="nonstandardXp" /><label for="nonstandardXp">Non-standard XP options</label><br /><br />
+      <label>Name: <input type="text" id="name" value="Name" /></label><br />
+      <label>XP: <select id="xp">
+        <option class="nonstandardXp">1</option><option class="nonstandardXp">2</option><option class="nonstandardXp">3</option><option class="nonstandardXp">4</option><option class="nonstandardXp">5</option>
+        <option class="nonstandardXp">6</option><option class="nonstandardXp">7</option><option class="nonstandardXp">8</option><option class="nonstandardXp">9</option><option class="nonstandardXp">10</option>
+        <option class="nonstandardXp">11</option><option class="nonstandardXp">12</option><option class="nonstandardXp">13</option><option class="nonstandardXp">14</option>
+        <option>15</option>
+        <option class="nonstandardXp">16</option><option class="nonstandardXp">17</option><option class="nonstandardXp">18</option><option class="nonstandardXp">19</option>
+        <option>20</option>
+        <option class="nonstandardXp">21</option><option class="nonstandardXp">22</option><option class="nonstandardXp">23</option><option class="nonstandardXp">24</option>
+        <option>25</option>
+        <option class="nonstandardXp">26</option><option class="nonstandardXp">27</option><option class="nonstandardXp">28</option><option class="nonstandardXp">29</option><option class="nonstandardXp">30</option><option class="nonstandardXp">31</option><option class="nonstandardXp">32</option><option class="nonstandardXp">33</option><option class="nonstandardXp">34</option>
+        <option>35</option>
+        <option class="nonstandardXp">36</option><option class="nonstandardXp">37</option><option class="nonstandardXp">38</option><option class="nonstandardXp">39</option>
+        <option>40</option>
+        <option class="nonstandardXp">41</option><option class="nonstandardXp">42</option><option class="nonstandardXp">43</option><option class="nonstandardXp">44</option>
+        <option>45</option>
+        <option class="nonstandardXp">46</option><option class="nonstandardXp">47</option><option class="nonstandardXp">48</option><option class="nonstandardXp">49</option>
+        <option>50</option>
+        <option class="nonstandardXp">51</option><option class="nonstandardXp">52</option><option class="nonstandardXp">53</option><option class="nonstandardXp">54</option><option class="nonstandardXp">55</option><option class="nonstandardXp">56</option><option class="nonstandardXp">57</option><option class="nonstandardXp">58</option><option class="nonstandardXp">59</option>
+        <option>60</option>
+      </select></label>
+      <label>Card Color: <select id="color"><option>Purple</option><option>Red</option><option>Blue</option><option>Gold</option><option>Green</option><option>Orange</option><option>Silver</option><option>Black</option></select></label>
+      <label>Game Mode: <select id="mode"><option>Chuubo's</option><option>Glitch</option></select></label>
 
       <h2>Arc Assignments</h2>
       <b>
