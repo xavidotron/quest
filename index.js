@@ -1,4 +1,4 @@
-const imgUrl = 'http://xavid.us/img/';
+const imgUrl = 'http://xavid.us/quest/img/';
 
 function cardHtml(quest) {
     var ret = '<div style="width: 600px; margin: auto">';
