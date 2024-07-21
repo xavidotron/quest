@@ -95,10 +95,10 @@
       #anytime:checked ~ .anytime {
         display: block;
       }
-      #xp > .nonstandardXp {
+      .nonstandardXp {
         display: none;
       }
-      #nonstandardXp:checked ~ label .nonstandardXp {
+      #nonstandardXp:checked ~ * .nonstandardXp {
         display: block;
       }
     </style>
@@ -162,6 +162,13 @@
       <input type="text" id="major5" />
       </div>
       <textarea class="blockmode storyline" id="majorblock"></textarea>
+      
+      <div class="storyline">
+        <label>Limit to <input type="text" id="majorGoalMax" style="width:20px" /> Major Goals. (Leave blank for default)</label><br />
+        <div class="nonstandardXp">
+        <label>Major Goal XP Award: <select id="majorGoalXp"><option>1</option><option>2</option><option>3</option><option>4</option><option selected="selected">5</option></select></label>
+        </div>
+      </div>
 
       <h2 class="storyline">Quest Flavor</h2>
       <div class="indiv storyline">
