@@ -1,4 +1,4 @@
-const imgUrl = 'http://xavid.us/quest/img/';
+const imgUrl = 'img/';
 
 function cardHtml(quest) {
     var ret = '<div style="width: 600px; margin: auto">';
@@ -54,11 +54,17 @@ function cardHtml(quest) {
             }
         }
     } else {
-        ret += '<div style="font: bold 13pt Droid Serif, serif; margin: 0px 0px 5px">Major Goals</div>The HG can award you 5 XP towards this quest when:<ul style="margin: 0 0 1ex 1em; padding: 0px; list-style: none; text-indent: -1em">';
+        ret += '<div style="font: bold 13pt Droid Serif, serif; margin: 0px 0px 5px">Major Goals</div>The HG can award you ' + quest.majorGoalXp + ' XP towards this quest when:<ul style="margin: 0 0 1ex 1em; padding: 0px; list-style: none; text-indent: -1em">';
         for (var i = 0; i < quest.major.length; ++i) {
             ret += '<li style="margin: 5px 0">☐ ' + quest.major[i] + '</li>';
         }
-        ret += '</ul>You can earn each bonus once, for a total of up to ' + quest.major.length * 5 + ' XP.';
+        var majorGoalMax = getMajorGoalMax(quest);
+        if (majorGoalMax === quest.major.length) {
+          ret += '</ul>You can earn each bonus once, '
+        } else {
+          ret += '</ul>You can earn up to ' + majorGoalMax + ' of these bonuses, once each, ';
+        }
+        ret += 'for a total of up to ' + majorGoalMax * quest.majorGoalXp + ' XP.';
         ret += '<div style="font: bold 13pt Droid Serif, serif; margin: 20px 0px 5px">Quest Flavor</div>';
         if ($('mode').value == 'Glitch') {
             ret += "1/chapter, when you're in focus, you can earn a 1 XP for yourself and 1 XP for the quest when:";
@@ -104,11 +110,17 @@ function cardDiscord(quest) {
             }
         }
     } else {
-        ret += '**Major Goals**\nThe HG can award you 5 XP towards this quest when:\n';
+        ret += '**Major Goals**\nThe HG can award you ' + quest.majorGoalXp + ' XP towards this quest when:\n';
         for (var i = 0; i < quest.major.length; ++i) {
             ret += '☐ ' + quest.major[i] + '\n';
         }
-        ret += 'You can earn each bonus once, for a total of up to ' + quest.major.length * 5 + ' XP.\n\n';
+        var majorGoalMax = getMajorGoalMax(quest);
+        if (majorGoalMax === quest.major.length) {
+          ret += 'You can earn each bonus once, '
+        } else {
+          ret += 'You can earn up to ' + majorGoalMax + ' of these bonuses, once each, ';
+        }
+        ret += 'for a total of up to ' + majorGoalMax * quest.majorGoalXp + ' XP.\n\n';
         ret += '**Quest Flavor**\n';
         if ($('mode').value == 'Glitch') {
             ret += "1/chapter, when you're in focus, you can earn a 1 XP for yourself and 1 XP for the quest when:";
@@ -127,6 +139,15 @@ function cardDiscord(quest) {
         }
     }
     return ret;
+}
+
+function getMajorGoalMax(quest) {
+    var majorGoalMax = parseInt(quest.majorGoalMax);
+    if (!majorGoalMax) {
+      // Set max so that major goals earn less than half of the quest's XP
+      majorGoalMax = Math.floor(quest.xp / 2 / parseInt(quest.majorGoalXp));
+    }
+    return Math.min(majorGoalMax, quest.major.length);
 }
 
 function $(id) { return document.getElementById(id); }
@@ -308,6 +329,8 @@ function translateFormToObject() {
       "color": $('color').value.toLowerCase(),
       "anytimep": $('anytime').checked,
       "major": major,
+      "majorGoalXp": $('majorGoalXp').value,
+      "majorGoalMax": $('majorGoalMax').value,
       "flavor": flavor,
       "desc": $('desc').value
     }
@@ -319,9 +342,11 @@ function translateObjectToForm(quest) {
     $('color').value = capitalize(quest.color);
     $('anytime').checked = quest.anytimep;
     $('desc').value = quest.desc;
+    $('majorGoalXp').value = quest.majorGoalXp ? quest.majorGoalXp : 5;
+    $('majorGoalMax').value = quest.majorGoalMax ? quest.majorGoalMax : "";
     
     // Set non-standard XP checkbox if needed
-    if (standardXP.includes(parseInt(quest.xp))) {
+    if (standardXP.includes(parseInt(quest.xp)) && quest.majorGoalXp === 5) {
       $('nonstandardXp').checked = false;
     } else {
       $('nonstandardXp').checked = true;
